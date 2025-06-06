@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="index.js"></script>
+    <script src="lang.js"></script>
+</head>
+<style>
+  .wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .wrapper > *  {
+    flex: 0 0 auto;
+    margin: 4px 0;
+  }
+  footer > * {
+    margin: 0 8px;
+  }
+  footer > *:last-child {
+    margin-right: 0;
+  }
+  .row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+  }
+  .row > * {
+    margin: 0 8px;
+  }
+  .row > *:first-child {
+    margin-left: 0;
+  }
+  .row > *:last-child {
+    margin-right: 0;
+  }
+  .row sp-textfield, .row sp-checkbox, .row sp-detail {
+    flex: 1 1 auto;
+  }
+  .row sp-button {
+    flex: 0 0 auto;
+  }
+  #output {
+    background: var(--uxp-host-widget-hover-background-color);
+    padding: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--uxp-host-widget-hover-border-color);
+    font-family: 'Source Code Pro', 'Menlo', 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+  }
+  #state {
+    position: relative;
+    margin-left: 1.5em ;
+  }
+  #state:before {
+    content: '';
+    position: absolute;
+    left: -1.5em;
+    top: .5em;
+    width: 1em; height: 1em;
+    border-radius: .5em;
+  }
+  #state.negative:before {
+    background-color: red;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  #state.positive:before {
+    background-color: green;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+    .tab-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .tab-buttons sp-button[selected] {
+    background: var(--uxp-host-widget-hover-background-color);
+  }
+  .tab-content {
+    display: none;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  #settings-page sp-textfield,
+  #settings-page sp-button {
+    margin-bottom: 16px; /* 或更大数值 */
+  }
+
+  .large-detail {
+  font-size: 1.3em; /* 或根据需要调整数值 */
+  font-weight: bold; /* 可选：加粗 */
+}
+
+</style>
+
+<body>
+<div id="scope"></div>
+  <div class="wrapper">
+    <!-- 顶部分页按钮 -->
+    <div class="tab-buttons">
+      <sp-button id="tab-settings" selected data-i18n="tab-settings"></sp-button>
+      <sp-button id="tab-vectorscope" data-i18n="tab-vectorscope"></sp-button>
+    </div>
+
+    <!-- 设置分页 -->
+  <div class="tab-content" id="settings-page">
+    <sp-heading data-i18n="settings-server-heading"></sp-heading>
+    <div class="row">
+      <sp-textfield placeholder="" value="" id="url">
+        <sp-label slot="label" data-i18n="server-url-label"></sp-label>
+      </sp-textfield>
+    </div>
+    <div class="row">
+      <sp-textfield placeholder="" value="" id="python">
+        <sp-label slot="label" data-i18n="python-label"></sp-label>
+      </sp-textfield>
+    </div>
+    <div class="row">
+      <sp-checkbox id="server-checkbox" data-i18n="local-server"></sp-checkbox>
+      <sp-checkbox id="device-checkbox" data-i18n="device-label">GPGPU</sp-checkbox>
+    </div>
+    <div class="row">
+      <sp-button id="validate" data-i18n="validate"></sp-button>
+    </div>
+
+  <sp-divider size="large"></sp-divider>
+
+    <sp-heading data-i18n="settings-scope-heading"></sp-heading>
+    <div class="row">
+      <sp-textfield placeholder="" id="gain">
+        <sp-label slot="label" data-i18n="gain-label"></sp-label>
+      </sp-textfield>
+      <sp-textfield placeholder="" id="scale">
+        <sp-label slot="label" data-i18n="scale-label"></sp-label>
+      </sp-textfield>
+      <sp-textfield placeholder="" id="samprate">
+        <sp-label slot="label" data-i18n="samplerate-label"></sp-label>
+      </sp-textfield>
+    </div>
+    <div class="row">
+      <sp-button id="save-settings" data-i18n="save-settings"></sp-button>
+    </div>
+
+  <sp-divider size="large"></sp-divider>
+
+    <div class="row">
+        <sp-detail data-i18n="server-status"></sp-detail>
+        <sp-body size="XS" id="state" class="negative" data-i18n="disconnected"></sp-body>
+     </div>
+  </div>
+
+    <!-- 示波器显示分页 -->
+    <div class="tab-content active" id="scope-page">
+      <sp-detail class="large-detail" data-i18n="vectorscope-heading"></sp-detail>
+      <div class="image-box">
+        <img id="vectorscope-img" src="" alt="vectorscope" style="max-width:100%;max-height:200px;display:block;">
+      </div>
+      <sp-divider size="small"></sp-divider>
+      <sp-detail class="large-detail" data-i18n="intensityscope-heading"></sp-detail>
+      <div class="image-box">
+        <img id="intensityscope-img" src="" alt="intensityscope" style="max-width:100%;max-height:200px;display:block;">
+      </div>
+      <!--
+      <sp-heading data-i18n="vectorscope-heading"></sp-heading>
+      <sp-divider size="large"></sp-divider> 
+
+      <sp-detail data-i18n="server-connection"></sp-detail>
+
+      <sp-divider></sp-divider>
+      <sp-body id="output" data-i18n="output"></sp-body>
+
+      <sp-detail data-i18n="interaction"></sp-detail>
+      <sp-divider></sp-divider>
+      <sp-textfield placeholder="" id="text">
+        <sp-label slot="label" data-i18n="send-message-label"></sp-label>
+      </sp-textfield>
+      <sp-checkbox id="rand" data-i18n="rand"></sp-checkbox>
+      <sp-checkbox id="fast" data-i18n="fast"></sp-checkbox>
+
+      <div style="flex: 1 1 auto"></div>
+
+      <sp-detail data-i18n="control"></sp-detail>
+      <sp-divider></sp-divider>
+      <footer>
+        <sp-action-button id="disconnect" data-i18n="disconnect"></sp-action-button>
+      </footer>
+      -->
+    </div>
+  </div>
+  
+  <script>
+    // 分页切换逻辑
+    const tabSettings = document.getElementById('tab-settings');
+    const tabTest = document.getElementById('tab-vectorscope');
+    const settingsPage = document.getElementById('settings-page');
+    const testPage = document.getElementById('scope-page');
+
+    tabSettings.addEventListener('click', () => {
+      tabSettings.setAttribute('selected', '');
+      tabTest.removeAttribute('selected');
+      settingsPage.classList.add('active');
+      testPage.classList.remove('active');
+    });
+
+    tabTest.addEventListener('click', () => {
+      tabTest.setAttribute('selected', '');
+      tabSettings.removeAttribute('selected');
+      testPage.classList.add('active');
+      settingsPage.classList.remove('active');
+    });
+  </script>
+</div>
+</body>
+</html>
