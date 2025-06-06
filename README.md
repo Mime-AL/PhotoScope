@@ -3,7 +3,7 @@ A Photoshop plug-in for add vectorscope and waveformscope.
 
 ***
 ## summary
-To automated launch scope calculate server, this plugin need to **fullaccess permissions**! You can remove the permissions, and launch server manualy, and autorun only in Windows.
+This plugin requires **fullaccess permission** for automatic compute server startup! You can remove permissions and start the server manually; automatic startup is only available for Windows.
 
 为了自动启动计算服务器，本插件需要**完全访问权限**！你可以移除权限，并且手动启动服务器，自动启动功能仅可用于windows。
 
