@@ -3,9 +3,9 @@ A Photoshop plug-in for add vectorscope and waveformscope.
 
 ***
 ## summary
-To automated launch scope calculate server, this plugin need to <font color=Red>fullaccess permissions</font>! You can remove the permissions, and launch server manualy, and autorun only in Windows.
+To automated launch scope calculate server, this plugin need to **fullaccess permissions**! You can remove the permissions, and launch server manualy, and autorun only in Windows.
 
-为了自动启动计算服务器，本插件需要<font color=Red>完全访问权限</font>！你可以移除权限，并且手动启动服务器，自动启动功能仅限于windows。
+为了自动启动计算服务器，本插件需要**完全访问权限**！你可以移除权限，并且手动启动服务器，自动启动功能仅可用于windows。
 
 This plugin uses WebSocket to send Photoshop images to a server for vectorscope and wavefromscope result calculation and displays the results within the panel. It supports both CUDA acceleration and CPU computation.
 
